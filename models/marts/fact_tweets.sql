@@ -1,0 +1,9 @@
+SELECT    tweet_id
+        , created_timestamp
+        , retweet_count
+        , favorite_count
+        , is_retweeted
+        , has_hashtags
+        , tweet_user_id
+        , retweet_user_id
+FROM      {{ref('stg_tweets')}}

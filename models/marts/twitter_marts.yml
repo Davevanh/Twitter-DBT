@@ -1,0 +1,98 @@
+version: 2
+
+models:
+  - name: fact_tweets
+    description: A table containing all event related tweet data
+
+    columns:
+      - name: tweet_id
+        description: unique identifier of each tweet (primary key)
+        tests:
+          - unique
+          - not_null
+
+      - name: tweet_user_id
+        description: the user id of the person who tweeted. Foreign key to dim_users
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_users')
+              field: user_id
+
+      - name: retweet_user_id
+        description: the user id of the person whose tweet got retweeted by Naval Ravikant. Foreign key to dim_users
+        tests:
+          - relationships:
+              to: ref('dim_users')
+              field: user_id
+
+
+
+  - name: fact_users
+    description: A table containing all event related data related to users
+
+    columns:
+      - name: user_id
+        description: unique identifier of a user
+        tests:
+          - unique
+          - not_null
+
+
+
+  - name: dim_tweets
+    description: A table containing all contextual data related to tweets
+
+    columns:
+      - name: tweet_id
+        description: unique identifier of each tweet (primary key)
+        tests:
+          - unique
+          - not_null
+
+
+
+  - name: dim_users
+    description: A table containing all contextual data related to users
+
+    columns:
+      - name: user_id
+        description: unique identifier of a user
+        tests:
+          - unique
+          - not_null
+
+
+
+  - name: dim_hashtags
+    description: A table containing all contextual data related to hashtags
+
+    columns:
+      - name: hashtag_id
+        description: unique identifier of a hashtag (primary key)
+        tests:
+          - unique
+          - not_null
+
+
+
+  - name: bridge_hashtags_tweets
+    description: A bridge table connecting the tweets table with the hashtags table to allow reporting on multiple hashtags by tweet
+
+    columns:
+      - name: tweet_id
+        description: the tweet_id's that have include a hashtag. Foreign key to fact_tweets
+        tests:
+          - not_null
+          - relationships:
+              to: ref('fact_tweets')
+              field: tweet_id
+
+
+      - name: hashtag_id
+        description: identifier of a hashtag. This doesn't have to be null - multiple tweets can contain the same hashtag. Foreign key to dim_hashtags
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_hashtags')
+              field: hashtag_id  
