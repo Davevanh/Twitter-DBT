@@ -1,0 +1,16 @@
+name: 'Twitter'
+version: '1.0'
+profile: 'twitter'
+source-paths: ["models"]
+macro-paths: ['macros']
+
+models:
+  Twitter:
+    Staging:
+      schema: staging
+      materialized: table
+
+
+    Marts:
+      schema: marts
+      materialized: table
