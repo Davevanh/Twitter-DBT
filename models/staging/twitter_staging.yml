@@ -1,0 +1,40 @@
+version: 2
+
+models:
+  - name: stg_tweets
+    description: A table containing all tweet related source data from Twitter timeline
+
+    columns:
+      - name: tweet_id
+        description: unique identifier (primary key of the stg_tweets table)
+        tests:
+          - unique
+          - not_null
+
+      - name: hashtags_array
+        description: array containing all hashtags related to a tweet
+
+      - name: tweet_user_id
+        description: the user id of the person who tweeted
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_users')
+              field: user_id
+
+      - name: retweet_user_id
+        description: the user id of the person whose tweet got retweeted by Naval Ravikant
+        tests:
+          - relationships:
+              to: ref('stg_users')
+              field: user_id
+
+  - name: stg_users
+    description: A table containing all data related to users (Tweeting user as well as users who have been retweeted)
+
+    columns:
+      - name: user_id
+        description: unique identifier of a user
+        tests:
+          - unique
+          - not_null
